@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/pasme/images">
+        <file alias="a">images/modoedcriptmain.png</file>
+        <file alias="b">images/modoedcriptpar.png</file>
+        <file alias="c">images/modoocultar.png</file>
+    </qresource>
+</RCC>
