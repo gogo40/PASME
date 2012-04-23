@@ -45,6 +45,12 @@ private slots:
 	void chamarDesencriptador();
 	void chamarAjuda();
 	void chamarSobre();
+    void chamarOcultarInformacaoImagem();
+    void chamarRevelarInformacaoImagem();
+    void capturarNomeArquivoOcultarMensagemImagem();
+    void capturarNomeArquivoOcultarArquivoAlvo();
+    void capturarNomeArquivoRevelarMensagemImagem();
+    void capturarNomeArquivoRevelarArquivoDestino();
 
 private:
 	Ui::MainWindow *ui;
@@ -53,6 +59,10 @@ private:
 
 	bool usarArquivoChave;//usar arquivo chave
 
+    QString nomeArquivoOcultarMensagemImagem;
+    QString nomeArquivoOcultarArquivoAlvo;
+    QString nomeArquivoRevelarMensagemImagem;
+    QString nomeArquivoRevelarArquivoDestino;
 	QString nomeArquivoMensagemASerOcultada;
 	QString nomeArquivoOndeEsconderMensagem;
 	QString nomeArquivoComMensagemASerRecuperada;

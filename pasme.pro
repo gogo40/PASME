@@ -32,7 +32,9 @@ FORMS    += mainwindow.ui \
     ajuda.ui \
     sobre.ui
 
-LIBS += -lz -lgmpxx -lgmp
+LIBS += -lz -lgmpxx -lgmp `Magick++-config --ldflags --libs`
 
 RESOURCES += \
     pasme.qrc
+
+QMAKE_CXXFLAGS += `Magick++-config --cxxflags --cppflags`

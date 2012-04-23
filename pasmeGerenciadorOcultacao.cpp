@@ -150,4 +150,137 @@ void revela(const char* fonte, const char* dest, QWidget * p){
 
 }
 
+//Estenografia
+void initPosColors(Magick::Image& image, PosColors& vp, int WORDSIZE) {
+    size_t c = image.rows();
+    size_t r = image.columns();
+
+    for (size_t i = 0; i < r; ++i) {
+        for (size_t j = 0; j < c; ++j) {
+            Magick::Color mc = image.pixelColor(i, j);
+
+            Magick::Quantum red = mc.redQuantum();
+            Magick::Quantum green = mc.greenQuantum();
+            Magick::Quantum blue = mc.blueQuantum();
+
+            if (okColor(red, WORDSIZE))
+                vp.push_back(PosColor(i, j, red, 0));
+
+            if (okColor(green, WORDSIZE))
+                vp.push_back(PosColor(i, j, green, 1));
+
+            if (okColor(blue, WORDSIZE))
+                vp.push_back(PosColor(i, j, blue, 2));
+        }
+    }
+}
+
+void saveByte(PosColors& vpc, char mc, int& ip, int WORDSIZE) {
+    int ni = (1 << 8) / WORDSIZE;
+    int c = mc;
+
+    for (int k = 0; k < ni && ip < vpc.size(); ++k) {
+        int w = c % WORDSIZE;
+
+        c /= WORDSIZE;
+
+        int v = vpc[ip].c % WORDSIZE;
+        int p = (WORDSIZE + w - v) % WORDSIZE;
+
+        vpc[ip].c += p;
+
+        ip++;
+    }
+}
+
+char loadByte(PosColors& vpc, int& ip, int WORDSIZE) {
+    int ni = (1 << 8) / WORDSIZE;
+    int c = 0;
+    int wa = 1;
+
+
+    for (int k = 0; k < ni && ip < vpc.size(); ++k) {
+        int w = vpc[ip].c % WORDSIZE;
+
+        c = wa * w + c;
+
+        ip++;
+
+        wa *= WORDSIZE;
+    }
+
+    return (char)(c);
+}
+
+void merge(const char* fname, const char* image, const char* msg, int len, int WORDSIZE) {
+    Magick::Image inImage(image);
+    PosColors vpc;
+
+    size_t c = inImage.rows();
+    size_t r = inImage.columns();
+    int ip;
+
+    Magick::Image outImage(Magick::Geometry(r, c), Magick::Color(0, 0, 0, 0));
+
+    initPosColors(inImage, vpc, WORDSIZE);
+
+    ip = 0;
+    for (size_t i = 0; i < len; ++i) {
+        saveByte(vpc, msg[i], ip, WORDSIZE);
+    }
+
+    for (int i = 0; i < r; ++i) {
+        for (int j = 0; j < c; ++j) {
+            Magick::Color mc = inImage.pixelColor(i, j);
+            outImage.pixelColor(i, j, mc);
+        }
+    }
+
+    for (int i = 0; i < vpc.size(); ++i) {
+        int ix = vpc[i].x;
+        int iy = vpc[i].y;
+        int c = vpc[i].c;
+        int type = vpc[i].type;
+        Magick::Color mc = outImage.pixelColor(ix, iy);
+
+        Magick::Quantum red = mc.redQuantum();
+        Magick::Quantum green = mc.greenQuantum();
+        Magick::Quantum blue = mc.blueQuantum();
+
+        switch (type) {
+            case 0:
+                mc.redQuantum(c);
+            break;
+
+            case 1:
+                mc.greenQuantum(c);
+            break;
+
+            case 2:
+                mc.blueQuantum(c);
+            break;
+        }
+
+        outImage.pixelColor(ix, iy, mc);
+    }
+
+    outImage.write(fname);
+}
+
+void recover(const char* fout, const char* fin, int len, int WORDSIZE) {
+    FILE* fOut = fopen(fout, "wb");
+    Magick::Image inImage(fin);
+    PosColors vpc;
+
+    int ip;
+
+    initPosColors(inImage, vpc, WORDSIZE);
+
+    ip = 0;
+    for (int i = 0; i < len; ++i) {
+        char c = loadByte(vpc, ip, WORDSIZE);
+        fwrite(&c, 1, sizeof(char), fOut);
+    }
+    fclose(fOut);
+}
 
