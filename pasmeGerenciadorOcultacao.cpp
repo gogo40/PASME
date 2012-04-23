@@ -175,7 +175,7 @@ void initPosColors(Magick::Image& image, PosColors& vp, int WORDSIZE) {
     }
 }
 
-void saveByte(PosColors& vpc, char mc, int& ip, int WORDSIZE) {
+void saveByte(PosColors& vpc, uchar mc, int& ip, int WORDSIZE) {
     int ni = (1 << 8) / WORDSIZE;
     int c = mc;
 
@@ -193,7 +193,7 @@ void saveByte(PosColors& vpc, char mc, int& ip, int WORDSIZE) {
     }
 }
 
-char loadByte(PosColors& vpc, int& ip, int WORDSIZE) {
+uchar loadByte(PosColors& vpc, int& ip, int WORDSIZE) {
     int ni = (1 << 8) / WORDSIZE;
     int c = 0;
     int wa = 1;
@@ -209,10 +209,10 @@ char loadByte(PosColors& vpc, int& ip, int WORDSIZE) {
         wa *= WORDSIZE;
     }
 
-    return (char)(c);
+    return (uchar)(c);
 }
 
-void merge(const char* fname, const char* image, const char* msg, int len, int WORDSIZE) {
+void merge(const char* fname, const char* image, std::vector<uchar>& msg, int len, int WORDSIZE) {
     Magick::Image inImage(image);
     PosColors vpc;
 
@@ -278,8 +278,8 @@ void recover(const char* fout, const char* fin, int len, int WORDSIZE) {
 
     ip = 0;
     for (int i = 0; i < len; ++i) {
-        char c = loadByte(vpc, ip, WORDSIZE);
-        fwrite(&c, 1, sizeof(char), fOut);
+        uchar c = loadByte(vpc, ip, WORDSIZE);
+        fwrite(&c, 1, sizeof(c), fOut);
     }
     fclose(fOut);
 }

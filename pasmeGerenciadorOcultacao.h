@@ -9,8 +9,13 @@
 #include <zlib.h>
 #include <string>
 #include <QWidget>
+#include <vector>
 
 #include <Magick++.h>
+
+
+typedef unsigned char uchar;
+
 
 inline int newColor(int color, int inc, int WORDSIZE) {
     if (color + inc >= MaxRGB - WORDSIZE ) return color;
@@ -33,9 +38,9 @@ struct PosColor {
 typedef std::vector<PosColor> PosColors;
 
 void initPosColors(Magick::Image& image, PosColors& vp, int WORDSIZE);
-void saveByte(PosColors& vpc, char mc, int& ip, int WORDSIZE);
-char loadByte(PosColors& vpc, int& ip, int WORDSIZE);
-void merge(const char* fname, const char* image, const char* msg, int len, int WORDSIZE);
+void saveByte(PosColors& vpc, uchar mc, int& ip, int WORDSIZE);
+uchar loadByte(PosColors& vpc, int& ip, int WORDSIZE);
+void merge(const char* fname, const char* image, std::vector<uchar>& msg, int len, int WORDSIZE);
 void recover(const char* fout, const char* fin, int len, int WORDSIZE);
 
 /**

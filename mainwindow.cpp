@@ -42,22 +42,22 @@ void MainWindow::chamarOcultarInformacaoImagem(){
     //void merge(const char* fname, const char* image, const char* msg, int len, int WORDSIZE);
     FILE* f = fopen(this->nomeArquivoOcultarArquivoAlvo.toAscii(),"rb");
     int len = 0;
-    string msg = "";
+    std::vector<uchar> msg;
     QString Msg("");
 
     while (!feof(f)) {
-        char c;
+        uchar c;
         fread(&c,1,sizeof(c),f);
-        if (c == EOF) break;
+        //if ((char)(c) == EOF) break;
         len++;
-        msg+=c;
+        msg.push_back(c);
     }
     fclose(f);
 
     try {
         merge((this->nomeArquivoOcultarMensagemImagem+".pasme.png").toAscii(),
           this->nomeArquivoOcultarMensagemImagem.toAscii(),
-          msg.c_str(), len, WORDSIZE);
+          msg, len, WORDSIZE);
         QString ls("");
         ls.setNum(len);
         Msg = QString(tr("Tamanho mensagem: ")) + ls + "\n";
@@ -90,12 +90,12 @@ void MainWindow::chamarRevelarInformacaoImagem(){
 }
 
 void MainWindow::capturarNomeArquivoOcultarMensagemImagem(){
-    this->nomeArquivoOcultarMensagemImagem = QFileDialog::getOpenFileName(this, tr("Arquivo que vai ser ocultado"),".");
+    this->nomeArquivoOcultarMensagemImagem = QFileDialog::getOpenFileName(this,tr("Arquivo onde ocultar mensagem"),".");
     ui->nomeOcultarArquivoImagem->setText(this->nomeArquivoOcultarMensagemImagem);
 }
 
 void MainWindow::capturarNomeArquivoOcultarArquivoAlvo(){
-    this->nomeArquivoOcultarArquivoAlvo = QFileDialog::getOpenFileName(this,tr("Arquivo onde ocultar mensagem"),".");
+    this->nomeArquivoOcultarArquivoAlvo = QFileDialog::getOpenFileName(this, tr("Arquivo que vai ser ocultado"),".");
     ui->nomeOcultarArquivoAlvo->setText(this->nomeArquivoOcultarArquivoAlvo);
 }
 
