@@ -63,7 +63,7 @@ void MainWindow::chamarOcultarInformacaoImagem(){
         Msg = QString(tr("Tamanho mensagem: ")) + ls + "\n";
         QMessageBox::information(this,tr("Aviso!"),Msg);
     } catch (Magick::Exception& error) {
-        Msg = QString(tr("Erro: ")) + error.what()< + "\n";
+        Msg = QString(tr("Erro: ")) + error.what() + "\n";
         QMessageBox::information(this,tr("Aviso!"),Msg);
     }
 }
@@ -84,7 +84,7 @@ void MainWindow::chamarRevelarInformacaoImagem(){
         Msg = QString(tr("Tamanho mensagem: ")) + ls + "\n";
         QMessageBox::information(this,tr("Aviso!"),Msg);
     } catch (Magick::Exception& error) {
-        Msg = QString(tr("Erro: ")) + error.what()< + "\n";
+        Msg = QString(tr("Erro: ")) + error.what() + "\n";
         QMessageBox::information(this,tr("Aviso!"),Msg);
     }
 }
