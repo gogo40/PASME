@@ -642,7 +642,11 @@
             </widget>
            </item>
            <item row="2" column="3">
-            <widget class="QSpinBox" name="lenOcultaMensagem"/>
+            <widget class="QSpinBox" name="lenOcultaMensagem">
+             <property name="maximum">
+              <number>1000000000</number>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
