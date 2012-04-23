@@ -38,3 +38,16 @@ RESOURCES += \
     pasme.qrc
 
 QMAKE_CXXFLAGS += `Magick++-config --cxxflags --cppflags`
+
+OTHER_FILES +=
+
+contains(MEEGO_EDITION,harmattan) {
+    target.path = /opt/pasme/bin
+    INSTALLS += target
+}
+
+contains(MEEGO_EDITION,harmattan) {
+    desktopfile.files = pasme.desktop
+    desktopfile.path = /usr/share/applications
+    INSTALLS += desktopfile
+}
