@@ -16,6 +16,7 @@
 
 typedef unsigned char uchar;
 
+using namespace MagickCore;
 
 inline int newColor(int color, int inc, int WORDSIZE) {
     if (color + inc >= MaxRGB - WORDSIZE ) return color;
